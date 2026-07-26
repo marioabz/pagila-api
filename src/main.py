@@ -1,10 +1,12 @@
 from datetime import datetime
+from typing import Annotated
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from .db.engine import Session
+from .db.engine import get_db
 from .models.actor import Actor
 
 
@@ -35,23 +37,16 @@ class ActorModel(BaseModel):
 app = FastAPI()
 
 
-class Item(BaseModel):
-    name: str
-    price: float
-    has_discount: bool
-
-
 @app.get("/")
 def hello_world():
     return {"message": "Hello world from FastAPI"}
 
 
 @app.get("/list_actors")
-def get_actors():
-    with Session() as sess:
-        statement = select(Actor).where(Actor.actor_id <= 10)
-        results = sess.execute(statement).all()
-        print(results[0][0].__dict__)
+def get_actors(db: Annotated[Session, Depends(get_db)]):
+
+    statement = select(Actor).where(Actor.actor_id <= 10)
+    results = db.execute(statement).all()
     return [ActorModel.model_validate(result[0].__dict__) for result in results]
 
 

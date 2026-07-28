@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -26,4 +25,3 @@ class FilmSummaryModel(BaseModel):
     release_year: int | None
     rental_rate: float
     rating: str | None
-

@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .routes.actor import router
+
+from .routes.actor import router as actor_router
+from .routes.customer import router as customer_router
+from .routes.inventory import router as inventory_router
+from .routes.rental import router as rental_router
 
 
 class Token(BaseModel):
@@ -21,7 +25,10 @@ class User(BaseModel):
 
 app = FastAPI()
 
-app.include_router(router)
+app.include_router(actor_router)
+app.include_router(customer_router)
+app.include_router(inventory_router)
+app.include_router(rental_router)
 
 
 @app.get("/health")

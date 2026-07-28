@@ -20,7 +20,6 @@ entrypoint = "src.main:app"
 
 [dependency-groups]
 dev = [
-    "black>=26.5.1",
     "ruff>=0.16.0",
 ]
 
